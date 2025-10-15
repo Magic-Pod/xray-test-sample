@@ -23,9 +23,9 @@ jobs:
       - name: Run MagicPod
         env:
           MAGICPOD_API_TOKEN: ${{ secrets.MAGICPOD_API_TOKEN }}
-          MAGICPOD_ORGANIZATION_NAME: MagicPod_Liu_Test
-          MAGICPOD_PROJECT_NAME: test
-          MAGICPOD_TEST_SETTING_ID: 1
+          MAGICPOD_ORGANIZATION_NAME: [Your organization name]
+          MAGICPOD_PROJECT_NAME: [Your project name]
+          MAGICPOD_TEST_SETTING_ID: [Your test setting ID]
         run: python run_magicpod.py
 
       - name: Add test results to Xray
