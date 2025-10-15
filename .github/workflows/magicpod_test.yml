@@ -1,0 +1,37 @@
+on: [push]
+
+jobs:
+  magic_pod_job:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+
+      - name: Install python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+          
+      - name: Install magicpod-api-client
+        env:
+          MAGICPOD_API_TOKEN: ${{ secrets.MAGICPOD_API_TOKEN }}
+        run: bash download_magicpod_api_client.sh
+
+      - name: Run MagicPod
+        env:
+          MAGICPOD_API_TOKEN: ${{ secrets.MAGICPOD_API_TOKEN }}
+          MAGICPOD_ORGANIZATION_NAME: MagicPod_Liu_Test
+          MAGICPOD_PROJECT_NAME: test
+          MAGICPOD_TEST_SETTING_ID: 1
+        run: python run_magicpod.py
+
+      - name: Add test results to Xray
+        env:
+          XRAY_BASE_URL: https://xray.cloud.getxray.app
+          XRAY_ID: ${{ secrets.XRAY_ID }}
+          XRAY_SECRET: ${{ secrets.XRAY_SECRET }}
+        run: python xray_import_results.py 
+             --magicpod-json magicpod_result 
